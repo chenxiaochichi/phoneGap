@@ -14,14 +14,40 @@
 
 <body>
     <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready111</p>
-        </div>
+        <input type="button" id="btn1" value="获取一次重力感应"/>
+        <input type="button" id="btn2" value="开启实时监听"/>
+        <input type="button" id="btn3" value="关闭"/>
+        <div id="d1"></div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
-   
+    <script>
+    	var oBtn1 = document.querySelector("#btn1");
+    	var oBtn2 = document.querySelector("#btn2");
+    	var oBtn3 = document.querySelector("#btn3");
+    	var watchID = null;
+    	
+    	oBtn1.addEventListener("click",function(){
+    		navigator.accelerometer.getCurrentAcceleration(function(acc){
+    			document.querySelector("#d1").innerHTML = acc.x+"/"+acc.y+"/"+acc.z;
+    		},function(){
+    			alert('onError!');
+    		});
+    	},false)
+    	
+    	oBtn2.addEventListener("click",function(){
+    		var options = { frequency: 300 };
+    		watchID = navigator.accelerometer.watchAcceleration(function(acc){
+    			document.querySelector("#d1").innerHTML = acc.x+"/"+acc.y+"/"+acc.z;
+    		}, 
+    		function(){
+    			alert('onError!');
+    		}, options);
+    	},false)
+    	
+    	oBtn3.addEventListener("click",function(){
+    		navigator.accelerometer.clearWatch(watchID);
+    		watchID = null;
+    	},false)
+    </script>
 </body>
-
 </html>

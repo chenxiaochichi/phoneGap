@@ -14,39 +14,30 @@
 
 <body>
     <div class="app">
-        <input type="button" id="btn1" value="获取一次重力感应"/>
-        <input type="button" id="btn2" value="开启实时监听"/>
-        <input type="button" id="btn3" value="关闭"/>
-        <div id="d1"></div>
+        <input type="button" id="btn1" value="alert"/>
+        <input type="button" id="btn2" value="confirm"/>
+        <input type="button" id="btn3" value="beep"/>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script>
     	var oBtn1 = document.querySelector("#btn1");
     	var oBtn2 = document.querySelector("#btn2");
     	var oBtn3 = document.querySelector("#btn3");
-    	var watchID = null;
     	
     	oBtn1.addEventListener("click",function(){
-    		navigator.accelerometer.getCurrentAcceleration(function(acc){
-    			document.querySelector("#d1").innerHTML = acc.x+"/"+acc.y+"/"+acc.z;
-    		},function(){
-    			alert('onError!');
-    		});
+    		navigator.notification.alert("操作成功", function(){
+    			alert("当警告对话框被忽略时调用的回调函数");
+    		}, "标题", "确定");
     	},false)
     	
     	oBtn2.addEventListener("click",function(){
-    		var options = { frequency: 300 };
-    		watchID = navigator.accelerometer.watchAcceleration(function(acc){
-    			document.querySelector("#d1").innerHTML = acc.x+"/"+acc.y+"/"+acc.z;
-    		}, 
-    		function(){
-    			alert('onError!');
-    		}, options);
+    		navigator.notification.confirm("你确定要这么操作", function(mes){
+    			alert(mes);
+    		}, "标题", "确定，取消");
     	},false)
     	
     	oBtn3.addEventListener("click",function(){
-    		navigator.accelerometer.clearWatch(watchID);
-    		watchID = null;
+    		navigator.notification.beep(2);
     	},false)
     </script>
 </body>
